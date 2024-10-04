@@ -1,0 +1,92 @@
+链接 ：[1553. 吃掉 N 个橘子的最少天数](https://leetcode.cn/problems/minimum-number-of-days-to-eat-n-oranges/description/)
+题型解法 ： [贪心](..\leetcode.md#贪心题)
+
+## 思路 
+```
+1. 一开始的思路
+n >= 3， 用方案3, 吃2*N/3个
+n = 2, 用方案2， 吃N/2个， 会剩下一个， 两天吃完
+n = 1, 的时候， 方案1吃一个， 一天吃完
+// n = 56， 代码算出来是5， 预期结果是6 
+// 果然没怎么简单， 我忽略了必须整除的条件， 必须先凑成能被整除才可以，才能按比例吃
+
+2. 左神的思路
+// 1) 吃掉一个橘子
+// 2) 如果n能被2整除，吃掉一半的橘子，剩下一半
+// 3) 如果n能被3正数，吃掉三分之二的橘子，剩下三分之一
+// 因为方法2）和3），是按比例吃橘子，所以必然会非常快
+// 所以，决策如下：
+// 可能性1：为了使用2）方法，先把橘子吃成2的整数倍，然后直接干掉一半，剩下的n/2调用递归
+// 即，n % 2 + 1 + minDays(n/2)
+// 可能性2：为了使用3）方法，先把橘子吃成3的整数倍，然后直接干掉三分之二，剩下的n/3调用递归
+// 即，n % 3 + 1 + minDays(n/3)
+// 至于方法1)，完全是为了这两种可能性服务的，因为能按比例吃，肯定比一个一个吃快(显而易见的贪心)
+
+注： + n % 2， n % 3  凑成能整除需要天数 
++ 1 ： 按比例吃的部分 
++  minDays(n/2) 剩余部分的天数  
+
+吃的时候，是一直减少的，可以使用记忆化搜索的方法
+    是通过比较来决定最优道路， 使用纯递归重复计算太耗时了
+```
+
+# 解题代码
+##  c++
+```c++
+class Solution {
+    std::unordered_map<int, int> dp;
+public:
+    int minDays(int n) {
+        if (n <= 1) {return n;}
+        if (dp.contains(n)) {
+            return dp[n];
+        }
+        int ans = 1 + std::min(n%2 + minDays(n/2), n%3 + minDays(n/3));
+        dp[n] = ans;
+        return ans;
+    }
+};
+```
+
+## python3
+```python
+class Solution:
+    def minDays(self, n: int) -> int:
+        @cache
+        def dfs(n: int) -> int:
+            if n <= 1: 
+                return n
+            return 1 + min(n % 2 + dfs(n // 2), n % 3 + dfs(n // 3))
+        return dfs(n)
+```
+
+## rust 
+```rust
+use std::collections::HashMap;
+
+impl Solution {
+    pub fn min_days(n: i32) -> i32 {
+        // 不好像c++那样添加类成员变量, 只能通过传参实现 
+        fn dfs(n: i32, dp: &mut HashMap<i32, i32>) -> i32 {
+            if n <= 1 {
+                return n
+            }
+
+            if let Some(&days) = dp.get(&n) {
+                return days
+            }
+
+            let res = 1 + (n % 2 + dfs(n / 2, dp)).min(n % 3 + dfs(n / 3, dp));
+            dp.insert(n, res);
+            res
+        }
+
+        let mut dp :HashMap<i32, i32> = HashMap::new();
+        dfs(n, &mut dp)
+    }
+}
+```
+
+# 总结 
+python 
+    @cache可以做记忆化搜索  
