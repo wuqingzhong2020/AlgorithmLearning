@@ -58,23 +58,27 @@ H~2~0, X^2^, ==高亮==，
 末尾空两个换行  
 aaa
 
-# 模版 
+# 文件模版
 ```
 # 总论
 链接 ：[179. 最大数](https://leetcode.cn/problems/largest-number/description/)
-题型解法 ： [贪心](..\leetcode.md#贪心题)
+题型解法 ： 贪心
 
 ## 思路 
+
 # 解题代码
 ##  c++
 ```c++
 ```
 
-## python 
+## python3
 ```python
 ```
 
 ## rust 
 ```rust
 ```
+
 ```
+
+
