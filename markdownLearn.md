@@ -60,8 +60,8 @@ aaa
 
 # 文件模版
 ```
-# 总论
-链接 ：[179. 最大数](https://leetcode.cn/problems/largest-number/description/)
+# 简述
+题目链接 ：[179. 最大数](https://leetcode.cn/problems/largest-number/description/)
 题型解法 ： [贪心](..\leetcode.md#贪心题)
 
 ## 思路
